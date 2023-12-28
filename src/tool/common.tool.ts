@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, SetMetadata } from '@nestjs/common';
 import * as _ from 'lodash';
 import { config } from '../config';
 import * as qs from 'qs';
@@ -113,3 +113,5 @@ export const isServerSideError = (err): boolean => {
     axios.isAxiosError(err) && (!err.response || /^5\d{2}$/.test(err.response?.status.toString()))
   );
 };
+
+export const ApiScopes = (...apiScopes: string[]) => SetMetadata('apiScopes', apiScopes);

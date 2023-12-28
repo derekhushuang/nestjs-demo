@@ -6,16 +6,19 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { HelloworldService } from '../service/helloworld.service';
 import { HelloworldDTO } from '../dto/helloworld.dto';
-import { LoggingInterceptor, TraceIdInterceptor } from '../interceptor';
+import { AuthGuard, LoggingInterceptor, TraceIdInterceptor } from '../interceptor';
+import { ApiScopes } from '../tool/common.tool';
 
 @Controller({
   path: '/helloworld',
   version: '1',
 })
+@UseGuards(AuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class HelloworldController {
   constructor(private helloworldService: HelloworldService) {}
@@ -28,7 +31,8 @@ export class HelloworldController {
 
   @Post('/')
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() helloworldDTO: HelloworldDTO): Promise<HelloworldDTO> {
+  @ApiScopes('test1', 'test2')
+  create(@Body() helloworldDTO: HelloworldDTO): HelloworldDTO {
     const created = this.helloworldService.create(helloworldDTO);
     return created;
   }

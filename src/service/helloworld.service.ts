@@ -9,10 +9,13 @@ import { HelloworldErrorcode } from '../errorcode/helloworld.errorcode';
 export class HelloworldService {
   constructor(private altafidConnector: DemoConnector, private logger: Logger) {}
 
-  private hellworld = null;
+  private hellworld: HelloworldDTO = {
+    name: 'abc',
+    age: 12,
+  };
 
   getHelloworld() {
-    return new SuccessResponse('200', 'hello world', true);
+    return this.hellworld;
   }
 
   create(helloworldDTO: HelloworldDTO) {
