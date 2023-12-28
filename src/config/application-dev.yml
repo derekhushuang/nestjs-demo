@@ -1,0 +1,9 @@
+# ===================================================================
+# Configuration.
+#
+# This configuration will be overridden by the BACKEND_ENV you use,
+# for example tenent-dev.yml if you use the "dev" profile.
+#
+# More information on profiles: https://www.jhipster.tech/profiles/
+# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
+# ===================================================================

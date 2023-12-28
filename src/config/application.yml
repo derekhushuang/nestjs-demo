@@ -1,0 +1,28 @@
+# ===================================================================
+# Configuration.
+#
+# This configuration will be overridden by the BACKEND_ENV you use,
+# for example tenent-dev.yml if you use the "dev" profile.
+#
+# More information on profiles: https://www.jhipster.tech/profiles/
+# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+server:
+  port: 3000
+application:
+  name: Business-BFF
+  logName: winston-log-bff
+  logColor: false
+  logLevel: debug
+  enableWinstonLog: false
+  enableTracing: true
+  corsOrigin: "*"
+  versioning:
+    type: 0
+    prefix: v
+  redis:
+    host: 10.59.199.156
+    port: 6379
+    database: 8
+    connectTimeout: 30000

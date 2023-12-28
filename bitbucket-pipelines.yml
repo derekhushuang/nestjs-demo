@@ -1,0 +1,230 @@
+definitions:
+  steps:
+    - step: &versioning
+        name: 'Versioning'
+        script:
+          - git describe --tags `git rev-list --tags --max-count=1` > build-info
+          - cat build-info
+        services:
+          - docker
+        artifacts:
+          - build-info
+    - step: &sast_scan
+        name: SAST Scan
+        script:
+          - export VERSION=`cat build-info`
+          - pipe: docker://gcr.io/gdat-315717/scanner
+            variables:
+              VERSION: $VERSION
+              GCP_PROJECT_ID: $GCP_PROJECT_ID
+              GCP_SERVICE_KEY: $GCP_SERVICE_KEY
+              SERVICE_NAME: "business-bff-services"
+              ENVIRONMENT: "dev"
+              SAST_SCAN_TYPE: "credscan,nodejs,dockerfile,yaml,depscan"
+              SAST_SCAN_EXIT_CODE: "0"
+              BUCKET: "gdat_scan_report_bucket_non-prod"
+              DEBUG: "true"
+    - step: &containerize
+        name: Containerize
+        script:
+          - export VERSION=`cat build-info`
+          - pipe: docker://gcr.io/gdat-315717/container_process
+            variables:
+              VERSION: $VERSION
+              SKAFFOLD_DEFAULT_REPO: "$DOCKER_REGISTRY/$GCP_PROJECT_ID"
+              GCP_PROJECT_ID: $GCP_PROJECT_ID
+              GCP_SERVICE_KEY: $GCP_SERVICE_KEY
+        services:
+          - docker
+    - step: &containerize_prod
+        name: Containerize Production
+        script:
+          - export VERSION=`cat build-info`
+          - pipe: docker://gcr.io/gdat-315717/container_process
+            variables:
+              VERSION: $VERSION
+              SKAFFOLD_DEFAULT_REPO: "$DOCKER_REGISTRY_PROD/$GCP_PROJECT_ID_PROD"
+              GCP_PROJECT_ID: $GCP_PROJECT_ID_PROD
+              GCP_SERVICE_KEY: $GCP_SERVICE_KEY_PROD
+        services:
+          - docker
+    # - step:
+    #     name: Container Image Scan
+    #     script:
+    #       - export VERSION=`cat build-info`
+    #       - pipe: docker://gcr.io/gdat-315717/scan_docker_image
+    #         variables:
+    #           VERSION: $VERSION
+    #           DOCKER_REGISTRY: "us.gcr.io"
+    #           GCP_PROJECT_ID: $GCP_PROJECT_ID
+    #           GCP_SERVICE_KEY: $GCP_SERVICE_KEY
+    #           IMAGE_NAME: "business-bff-services"
+    #           ENVIRONMENT: "dev"
+    #           TRIVY_SEVERITY: "LOW,MEDIUM,HIGH,CRITICAL"
+    #           TRIVY_EXIT_CODE: "0"
+    #           BUCKET: "gdat_scan_report_bucket_non-prod"
+    #           #DEBUG: "true"
+    #     services:
+    #       - docker
+    - step: &deploy_dev
+        name: Deploy To ALTAFID DEV
+        deployment: Dev
+        script:
+          - export VERSION=`cat build-info`
+          - pipe: docker://gcr.io/gdat-315717/deply_env
+            variables:
+              GITOPS_REPO: 'gitops-altafid-non-prod'
+              GITOPS_REPO_BASEPATH: '/releases'
+              VERSION: $VERSION
+              ENVIRONMENT: "altafid-dev"
+              DEPLOY_TO_ALTAFID: 'true'
+              SERVICE_NAME: "business-bff-services"
+              INTEGRATION_USER: $INTEGRATION_USER
+              SEMANTIC_TOKEN: $SEMANTIC_TOKEN
+              CHART_VERSION: ''
+        services:
+          - docker
+    - step: &deploy_test
+        name: Deploy To ALTAFID Test
+        deployment: Test
+        script:
+          - export VERSION=`cat build-info`
+          - pipe: docker://gcr.io/gdat-315717/deply_env
+            variables:
+              GITOPS_REPO: 'gitops-altafid-non-prod'
+              GITOPS_REPO_BASEPATH: '/releases'
+              VERSION: $VERSION
+              ENVIRONMENT: "altafid-test"
+              DEPLOY_TO_ALTAFID: 'true'
+              SERVICE_NAME: "business-bff-services"
+              INTEGRATION_USER: $INTEGRATION_USER
+              SEMANTIC_TOKEN: $SEMANTIC_TOKEN
+              CHART_VERSION: ''
+        services:
+          - docker
+    - step: &deploy_test_auto
+        name: Deploy To ALTAFID Test
+        deployment: Test
+        script:
+          - export VERSION=`cat build-info`
+          - pipe: docker://gcr.io/gdat-315717/deply_env
+            variables:
+              GITOPS_REPO: 'gitops-altafid-non-prod'
+              GITOPS_REPO_BASEPATH: '/releases'
+              VERSION: $VERSION
+              ENVIRONMENT: "altafid-test"
+              DEPLOY_TO_ALTAFID: 'true'
+              SERVICE_NAME: "business-bff-services"
+              INTEGRATION_USER: $INTEGRATION_USER
+              SEMANTIC_TOKEN: $SEMANTIC_TOKEN
+              CHART_VERSION: ''
+        services:
+          - docker
+    - step: &deploy_stage
+        name: Deploy To ALTAFID Stage
+        deployment: Staging
+        trigger: manual
+        manual: true
+        script:
+          - export VERSION=`cat build-info`
+          - pipe: docker://gcr.io/gdat-315717/deply_env
+            variables:
+              GITOPS_REPO: 'gitops-altafid-stage'
+              GITOPS_REPO_BASEPATH: '/releases'
+              VERSION: $VERSION
+              ENVIRONMENT: "altafid-stage"
+              DEPLOY_TO_ALTAFID: 'true'
+              SERVICE_NAME: "business-bff-services"
+              INTEGRATION_USER: $INTEGRATION_USER
+              SEMANTIC_TOKEN: $SEMANTIC_TOKEN
+              CHART_VERSION: ''
+        services:
+          - docker
+    - step: &deploy_stage_auto
+        name: Deploy To ALTAFID Stage
+        deployment: Staging
+        trigger: manual
+        manual: true
+        script:
+          - export VERSION=`cat build-info`
+          - pipe: docker://gcr.io/gdat-315717/deply_env
+            variables:
+              GITOPS_REPO: 'gitops-altafid-stage'
+              GITOPS_REPO_BASEPATH: '/releases'
+              VERSION: $VERSION
+              ENVIRONMENT: "altafid-stage"
+              DEPLOY_TO_ALTAFID: 'true'
+              SERVICE_NAME: "business-bff-services"
+              INTEGRATION_USER: $INTEGRATION_USER
+              SEMANTIC_TOKEN: $SEMANTIC_TOKEN
+              CHART_VERSION: ''
+        services:
+          - docker
+    - step: &deploy_prod
+        name: Deploy To ALTAFID Production
+        deployment: Production
+        trigger: manual
+        manual: true
+        script:
+          - export VERSION=`cat build-info`
+          - pipe: docker://gcr.io/gdat-315717/deply_env
+            variables:
+              GITOPS_REPO: 'gitops-altafid-production'
+              GITOPS_REPO_BASEPATH: '/releases'
+              VERSION: $VERSION
+              ENVIRONMENT: "altafid-prod"
+              DEPLOY_TO_ALTAFID: 'true'
+              SERVICE_NAME: "business-bff-services"
+              INTEGRATION_USER: $INTEGRATION_USER
+              SEMANTIC_TOKEN: $SEMANTIC_TOKEN
+              CHART_VERSION: ''
+        services:
+          - docker
+  services:
+    docker:
+      memory: 4096
+options:
+  docker: true
+  size: 2x
+
+pipelines:
+  tags:
+    feature-test-*:
+      - step: *versioning
+      - step: *sast_scan
+      - step: *containerize
+      - step: *deploy_test_auto
+    feature-dev-*:
+      - step: *versioning
+      - step: *sast_scan
+      - step: *containerize
+      - step: *deploy_dev
+    feature-stage-*:
+      - step: *versioning
+      - step: *sast_scan
+      - step: *containerize
+      - step: *deploy_stage_auto
+    feature-auto-*:
+      - step: *versioning
+      - step: *sast_scan
+      - step: *containerize
+      - step: *deploy_dev
+      - step: *deploy_test_auto
+      - step: *deploy_stage_auto
+    feature-*:
+      - step: *versioning
+      - step: *sast_scan
+      - step: *containerize
+      - step: *containerize_prod
+      - step: *deploy_dev
+      - step: *deploy_test
+      - step: *deploy_stage
+      - step: *deploy_prod
+    feature-prod-*:
+      - step: *versioning
+      - step: *sast_scan
+      - step: *containerize_prod
+      - step: *deploy_prod
+
+
+

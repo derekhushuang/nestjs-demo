@@ -1,0 +1,13 @@
+apiVersion: skaffold/v2beta17
+kind: Config
+build:
+  artifacts:
+  - image: business-bff-services
+    context: .
+    docker: {}
+  tagPolicy:
+    envTemplate:
+      template: '{{.VERSION}}'
+  local: {}
+deploy:
+  kubectl: {}

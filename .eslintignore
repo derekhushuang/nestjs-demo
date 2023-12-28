@@ -1,0 +1,10 @@
+.idea
+dist
+package.json
+
+**/*.d.ts
+
+*.eslintrc.*
+
+node_modules
+**/*sdk.ts
