@@ -7,15 +7,17 @@ import { HelloworldErrorcode } from '../errorcode/helloworld.errorcode';
 
 @Injectable()
 export class HelloworldService {
-  constructor(private altafidConnector: DemoConnector, private logger: Logger) {}
+  constructor(private demoConnector: DemoConnector, private logger: Logger) {}
 
-  private hellworld: HelloworldDTO = {
-    name: 'abc',
-    age: 12,
-  };
+  private hellworlds: HelloworldDTO[] = [
+    {
+      name: 'abc',
+      age: 12,
+    },
+  ];
 
-  getHelloworld() {
-    return this.hellworld;
+  findAll() {
+    return this.hellworlds;
   }
 
   create(helloworldDTO: HelloworldDTO) {
@@ -26,7 +28,7 @@ export class HelloworldService {
         HelloworldErrorcode.AGE_TOO_ERROR.code,
       );
     }
-    this.hellworld = helloworldDTO;
-    return this.hellworld;
+    this.hellworlds.push(helloworldDTO);
+    return helloworldDTO;
   }
 }

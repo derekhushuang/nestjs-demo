@@ -25,8 +25,8 @@ export class HelloworldController {
 
   @Get('/')
   @HttpCode(200)
-  helloworld() {
-    return this.helloworldService.getHelloworld();
+  findAll() {
+    return this.helloworldService.findAll();
   }
 
   @Post('/')
