@@ -25,13 +25,13 @@ export class HelloworldController {
   constructor(private helloworldService: HelloworldService) {}
 
   @Get('/')
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   findAll() {
     return this.helloworldService.findAll();
   }
 
   @Get('/:name')
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   async findone(@Param('name') name: string) {
     return await this.helloworldService.findOne(name);
   }
