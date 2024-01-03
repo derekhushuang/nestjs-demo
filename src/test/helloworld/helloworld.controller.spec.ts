@@ -1,14 +1,13 @@
-import {Test} from '@nestjs/testing';
-import {HelloworldController} from '../../controller/helloworld.controller';
-import {HelloworldService} from '../../service/helloworld.service';
-import {GlobalModule} from "../../global.module";
+import { Test } from '@nestjs/testing';
+import { HelloworldController } from '../../controller/helloworld.controller';
+import { HelloworldService } from '../../service/helloworld.service';
+import { GlobalModule } from '../../global.module';
 
 describe('HelloworldController', () => {
   let helloworldController: HelloworldController;
   let helloworldService: HelloworldService;
 
   beforeEach(async () => {
-
     const moduleRef = await Test.createTestingModule({
       imports: [GlobalModule],
       controllers: [HelloworldController],

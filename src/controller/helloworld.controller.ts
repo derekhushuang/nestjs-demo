@@ -5,13 +5,14 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { HelloworldService } from '../service/helloworld.service';
 import { HelloworldDTO } from '../dto/helloworld.dto';
-import { AuthGuard, LoggingInterceptor, TraceIdInterceptor } from '../interceptor';
+import { AuthGuard } from '../interceptor';
 import { ApiScopes } from '../tool/common.tool';
 
 @Controller({
@@ -27,6 +28,12 @@ export class HelloworldController {
   @HttpCode(200)
   findAll() {
     return this.helloworldService.findAll();
+  }
+
+  @Get('/:name')
+  @HttpCode(200)
+  async findone(@Param('name') name: string) {
+    return await this.helloworldService.findOne(name);
   }
 
   @Post('/')

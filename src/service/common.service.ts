@@ -1,7 +1,7 @@
-import {Inject, Injectable, Logger} from '@nestjs/common';
-import {REQUEST} from '@nestjs/core';
-import {Request} from 'express';
-import {DemoConnector} from '../connector/demo.connector';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
+import { DemoConnector } from '../connector/demo.connector';
 
 @Injectable()
 export class CommonService {

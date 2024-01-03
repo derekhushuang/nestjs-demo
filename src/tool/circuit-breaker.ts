@@ -19,8 +19,8 @@ export interface CircuitBreakerOptions {
 const breakerInstances = {};
 const defaultHalfOpenAfter = 10 * 1000;
 const defaultThreshold = 0.3;
-const defaultDuration = 60 * 1000;
-const defaultMinimunRps = 2;
+const defaultDuration = 10 * 1000;
+const defaultMinimunRps = 1;
 
 export const createAxiosBreaker = (
   name: string,

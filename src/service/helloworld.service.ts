@@ -1,9 +1,10 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { DemoConnector } from '../connector/demo.connector';
-import { SuccessResponse } from '../dto/success.response';
 import { HelloworldDTO } from '../dto/helloworld.dto';
 import { GenericException } from '../exception/generic.exception';
 import { HelloworldErrorcode } from '../errorcode/helloworld.errorcode';
+import { Policy } from 'cockatiel';
+import { createAxiosBreaker } from '../tool/circuit-breaker';
 
 @Injectable()
 export class HelloworldService {
@@ -17,6 +18,11 @@ export class HelloworldService {
   ];
 
   findAll() {
+    throw new GenericException(
+      HelloworldErrorcode.AGE_TOO_ERROR.msg,
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      HelloworldErrorcode.AGE_TOO_ERROR.code,
+    );
     return this.hellworlds;
   }
 
@@ -30,5 +36,14 @@ export class HelloworldService {
     }
     this.hellworlds.push(helloworldDTO);
     return helloworldDTO;
+  }
+
+  @Policy.use(createAxiosBreaker('Oro'))
+  async findOne(name: string) {
+    const result = await this.demoConnector.doGet({
+      url: 'http://localhost:4000/v1/helloworld/',
+      method: 'GET',
+    });
+    return result?.data?.find((r) => r.name === name);
   }
 }
