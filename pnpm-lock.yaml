@@ -88,6 +88,9 @@ dependencies:
   moment-timezone:
     specifier: ^0.5.43
     version: 0.5.43
+  nestjs-cls:
+    specifier: 3.6.0
+    version: 3.6.0(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.5.5)
   qs:
     specifier: ^6.11.1
     version: 6.11.1
@@ -9088,6 +9091,21 @@ packages:
       '@nestjs/common': 9.0.1(cache-manager@4.1.0)(class-transformer@0.5.1)(class-validator@0.13.2)(reflect-metadata@0.1.13)(rxjs@7.5.6)
       fast-safe-stringify: 2.1.1
       winston: 3.8.1
+    dev: false
+
+  /nestjs-cls@3.6.0(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.5.5):
+    resolution: {integrity: sha512-hAu8Pyhl0okB7LgQFoxP8kq26izBh0UCnDLfE2Ze9eJAz2A8XdFkBNIVca868T1Yf8bsLzvfsKPTxCQZ0hTMDQ==}
+    engines: {node: '>=12.17.0'}
+    peerDependencies:
+      '@nestjs/common': '> 7.0.0 < 11'
+      '@nestjs/core': '> 7.0.0 < 11'
+      reflect-metadata: '*'
+      rxjs: '>= 7'
+    dependencies:
+      '@nestjs/common': 9.4.3(cache-manager@4.1.0)(class-transformer@0.5.1)(class-validator@0.13.2)(reflect-metadata@0.1.13)(rxjs@7.5.5)
+      '@nestjs/core': 9.4.3(@nestjs/common@9.4.3)(@nestjs/microservices@9.4.3)(@nestjs/platform-express@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.5.5)
+      reflect-metadata: 0.1.13
+      rxjs: 7.5.5
     dev: false
 
   /next-tick@1.1.0:

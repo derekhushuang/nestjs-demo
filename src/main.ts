@@ -9,6 +9,7 @@ import { LoggingInterceptor, TraceIdInterceptor } from './interceptor';
 import * as _ from 'lodash';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { ClsService } from 'nestjs-cls';
 
 const logger = LoggerFactory.createLogger({
   enableWinstonLog: config.get('application.enableWinstonLog'),
@@ -40,8 +41,9 @@ async function createNestApp(options, appModule) {
   });
 
   const { httpAdapter } = app.get(HttpAdapterHost);
+  const clsService = app.get(ClsService);
   app.useGlobalFilters(new AxiosExceptionFilter(logger, httpAdapter));
-  app.useGlobalInterceptors(new LoggingInterceptor(), new TraceIdInterceptor());
+  app.useGlobalInterceptors(new LoggingInterceptor(clsService), new TraceIdInterceptor());
   app.useGlobalPipes(new ValidationPipe());
 
   _.templateSettings.interpolate = /{([\s\S]+?)}/g;

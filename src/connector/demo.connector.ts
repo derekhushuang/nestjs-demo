@@ -6,11 +6,12 @@ import { Request } from 'express';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { maskRequestData } from '../tool/common.tool';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class DemoConnector extends BaseConnector {
   constructor(
-    @Inject(REQUEST) private request: Request,
+    private cls: ClsService,
     private readonly httpService: HttpService,
     private logger: Logger,
   ) {
@@ -23,7 +24,7 @@ export class DemoConnector extends BaseConnector {
       method: MethodType.GET,
       headers: {
         ...config.headers,
-        ...this.authorizationHeader(this.request),
+        ...this.authorizationHeader(this.cls.get('req')),
         ...this.traceIdHeader(),
       },
     } as any;
@@ -49,7 +50,7 @@ export class DemoConnector extends BaseConnector {
       method: MethodType.POST,
       headers: {
         ...config.headers,
-        ...this.authorizationHeader(this.request),
+        ...this.authorizationHeader(this.cls.get('req')),
         ...this.traceIdHeader(),
       },
     } as any;

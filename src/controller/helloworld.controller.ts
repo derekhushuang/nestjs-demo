@@ -38,7 +38,7 @@ export class HelloworldController {
 
   @Post('/')
   @HttpCode(HttpStatus.CREATED)
-  @ApiScopes('test1', 'test2')
+  //  @ApiScopes('test1', 'test2')
   create(@Body() helloworldDTO: HelloworldDTO): HelloworldDTO {
     const created = this.helloworldService.create(helloworldDTO);
     return created;
