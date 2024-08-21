@@ -26,3 +26,6 @@ application:
     port: 6379
     database: 8
     connectTimeout: 30000
+  payment:
+    API_BASE_URL: https://your-api.com
+    API_KEY: your-api-key

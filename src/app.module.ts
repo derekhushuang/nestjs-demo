@@ -6,6 +6,7 @@ import { RedisClientOptions } from 'redis';
 import { HelloworldModule } from './module/helloworld.module';
 import { ClsModule } from 'nestjs-cls';
 import * as jwt from 'jsonwebtoken';
+import { PaymentModule } from './module/payment.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import * as jwt from 'jsonwebtoken';
     CacheModule.registerAsync<RedisClientOptions>(getCacheConfig()),
     OpenTelemetryModule.forRoot(getOpenTelemetryConfig()),
     HelloworldModule,
+    PaymentModule,
   ],
 })
 export class AppModule {}
