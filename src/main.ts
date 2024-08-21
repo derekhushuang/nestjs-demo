@@ -1,10 +1,9 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { LoggerFactory } from '@altafid/nestjs-logging';
+import { LoggerFactory } from '@aaxis/nestjs-logging';
 import { AxiosExceptionFilter } from './filter';
 import * as process from 'process';
 import { config, liveYamlConfigPath } from './config';
 import * as fs from 'fs';
-import { VersioningType } from '@nestjs/common/enums/version-type.enum';
 import { LoggingInterceptor, TraceIdInterceptor } from './interceptor';
 import * as _ from 'lodash';
 import { AppModule } from './app.module';

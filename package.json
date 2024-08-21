@@ -23,7 +23,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@altafid/nestjs-logging": "file:internal-package/altafid-nestjs-logging-1.0.6.tgz",
+    "@aaxis/nestjs-logging": "file:internal-package/aaxis-internal-nestjs-logging-2.1.1.tgz",
     "@google-cloud/opentelemetry-cloud-trace-exporter": "^2.0.0",
     "@metinseylan/nestjs-opentelemetry": "3.0.0",
     "@nestjs/axios": "2.0.0",
